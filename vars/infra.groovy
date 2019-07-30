@@ -118,8 +118,14 @@ Object runWithMaven(String command, String jdk = 8, List<String> extraEnv = null
  */
 Object runWithJava(String command, String jdk = 8, List<String> extraEnv = null) {
     String jdkTool = "jdk${jdk}"
+
+    sh "env"
+    sh "===================="
+    String tool = ${tool jdkTool}
+    sh "env"
+    echo tool
     List<String> env = [
-        "JAVA_HOME=${tool jdkTool}",
+        "JAVA_HOME=${tool}",
         'PATH+JAVA=${JAVA_HOME}/bin',
     ]
     if (extraEnv != null) {
