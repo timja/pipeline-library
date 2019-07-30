@@ -1,11 +1,11 @@
 #!/usr/bin/env groovy
 
 Boolean isRunningOnJenkinsInfra() {
-    return env.JENKINS_URL == 'https://ci.jenkins.io/' || isTrusted()
+    return false
 }
 
 Boolean isTrusted() {
-    return env.JENKINS_URL == 'https://trusted.ci.jenkins.io:1443/'
+    return false
 }
 
 Object withDockerCredentials(Closure body) {
@@ -49,12 +49,12 @@ boolean retrieveMavenSettingsFile(String settingsXml, String jdk = 8) {
             }
         }
         return true
-    }
+    } else if (jdk.toInteger() > 7 && isRunningOnJenkinsInfra()) {
         /* Azure mirror only works for sufficiently new versions of the JDK due to Letsencrypt cert */
         writeFile file: settingsXml, text: libraryResource('settings-azure.xml')
         return true
-
-
+    }
+    return false
 }
 
 /**
@@ -75,13 +75,13 @@ Object runMaven(List<String> options, String jdk = 8, List<String> extraEnv = nu
     ]
     if (settingsFile != null) {
         mvnOptions += "-s $settingsFile"
-    }
+    } else if (jdk.toInteger() > 7 && isRunningOnJenkinsInfra()) {
         /* Azure mirror only works for sufficiently new versions of the JDK due to Letsencrypt cert */
         def settingsXml = "${pwd tmp: true}/settings-azure.xml"
         if (retrieveMavenSettingsFile(settingsXml)) {
             mvnOptions += "-s $settingsXml"
         }
-    
+    }
     mvnOptions.addAll(options)
     mvnOptions.unique()
     String command = "mvn ${mvnOptions.join(' ')}"
