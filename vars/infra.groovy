@@ -120,7 +120,7 @@ Object runWithJava(String command, String jdk = 8, List<String> extraEnv = null)
     String jdkTool = "jdk${jdk}"
 
     sh "env"
-    sh "===================="
+    sh "echo ===================="
     String tool = ${tool jdkTool}
     sh "env"
     echo tool
