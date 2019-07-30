@@ -117,6 +117,8 @@ Object runWithMaven(String command, String jdk = 8, List<String> extraEnv = null
  * @return nothing
  */
 Object runWithJava(String command, String jdk = 8, List<String> extraEnv = null) {
+    env = []
+
     if (extraEnv != null) {
         env.addAll(extraEnv)
     }
