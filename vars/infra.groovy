@@ -121,7 +121,7 @@ Object runWithJava(String command, String jdk = 8, List<String> extraEnv = null)
 
     sh "env"
     sh "echo ===================="
-    String tool = ${tool jdkTool}
+    String tool = tool jdkTool
     sh "env"
     echo tool
     List<String> env = [
