@@ -49,12 +49,12 @@ boolean retrieveMavenSettingsFile(String settingsXml, String jdk = 8) {
             }
         }
         return true
-    } else if (jdk.toInteger() > 7 && isRunningOnJenkinsInfra()) {
+    }
         /* Azure mirror only works for sufficiently new versions of the JDK due to Letsencrypt cert */
         writeFile file: settingsXml, text: libraryResource('settings-azure.xml')
         return true
-    }
-    return false
+
+
 }
 
 /**
