@@ -75,13 +75,13 @@ Object runMaven(List<String> options, String jdk = 8, List<String> extraEnv = nu
     ]
     if (settingsFile != null) {
         mvnOptions += "-s $settingsFile"
-    } else if (jdk.toInteger() > 7 && isRunningOnJenkinsInfra()) {
+    }
         /* Azure mirror only works for sufficiently new versions of the JDK due to Letsencrypt cert */
         def settingsXml = "${pwd tmp: true}/settings-azure.xml"
         if (retrieveMavenSettingsFile(settingsXml)) {
             mvnOptions += "-s $settingsXml"
         }
-    }
+    
     mvnOptions.addAll(options)
     mvnOptions.unique()
     String command = "mvn ${mvnOptions.join(' ')}"
